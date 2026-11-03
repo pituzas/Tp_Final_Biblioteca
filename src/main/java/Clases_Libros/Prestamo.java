@@ -87,7 +87,7 @@ public class Prestamo {
     public void devolverEjemplar() {
         if (estadoPrestamo == EstadoPrestamo.DEVUELTO) {
             throw new IllegalArgumentException("El ejemplar ya fue devuelto!");
-        } else if (estadoPrestamo == EstadoPrestamo.VENCIDO) {
+        } else if (estadoPrestamo == EstadoPrestamo.CANCELADO) {
             System.out.println("Te excediste de la fecha de devolucion, que no vuelva a ocurrir.");
 
             ejemplar.setEstadoLibro(EstadoLibro.DISPONIBLE);

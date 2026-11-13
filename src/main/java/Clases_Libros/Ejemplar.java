@@ -33,6 +33,12 @@ public class Ejemplar implements Prestado {
     }
 
     public void setLibro(Libro libro) {
+<<<<<<< HEAD
+=======
+        if(libro == null) {
+            throw new DatosInvalidosException("El libro no puede ser null");
+        }
+>>>>>>> 043a097 (Implementacion DAO generico y persistencia JDBC)
         this.libro = libro;
     }
 

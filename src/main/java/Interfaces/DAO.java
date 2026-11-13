@@ -6,7 +6,7 @@ import Excepciones.UsuarioNoEncontradoException;
 
 import java.util.List;
 
-public interface DAO {
+public interface DAO<T> {
     public void insertar(Libro l) throws AccesoDatosException;
 
     public List<Libro> listarTodos() throws AccesoDatosException;

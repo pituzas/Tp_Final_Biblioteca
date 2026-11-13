@@ -1,12 +1,13 @@
 package Clases_Libros;
 
 import Enum.EstadoLibro;
+import Interfaces.Identificable;
 
 import java.util.Objects;
 import java.util.UUID;
 
 
-public class Libro {
+public abstract class Libro implements Identificable {
     private UUID id;
     private String nombre;
     private String autor;

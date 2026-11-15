@@ -1,19 +1,26 @@
 package Interfaces;
 
-import Clases_Libros.Libro;
 import Excepciones.AccesoDatosException;
-import Excepciones.UsuarioNoEncontradoException;
-
+import Excepciones.ElementoNoEncontradoException;
 import java.util.List;
 
 public interface DAO<T> {
-    public void insertar(Libro l) throws AccesoDatosException;
 
-    public List<Libro> listarTodos() throws AccesoDatosException;
+    void insertar(T elemento)
+            throws AccesoDatosException;
 
-    public Libro buscarPorId(String codigo) throws AccesoDatosException, UsuarioNoEncontradoException;
+    List<T> listarTodos()
+            throws AccesoDatosException;
 
-    public void actualizar(Libro h) throws AccesoDatosException, UsuarioNoEncontradoException;
+    T buscarPorId(String id)
+            throws AccesoDatosException,
+                   ElementoNoEncontradoException;
 
-    public void eliminar(String codigo) throws AccesoDatosException, UsuarioNoEncontradoException;
+    void actualizar(T elemento)
+            throws AccesoDatosException,
+                   ElementoNoEncontradoException;
+
+    void eliminar(String id)
+            throws AccesoDatosException,
+                   ElementoNoEncontradoException;
 }

@@ -32,13 +32,15 @@ public class Ejemplar implements Prestado {
         return libro;
     }
 
-    public void setLibro(Libro libro) {
-        if(id == null) {
-            throw new DatosInvalidosException("El id no puede ser null");
-        }
-        this.libro = libro;
+public void setLibro(Libro libro) {
+    if (libro == null) {
+        throw new DatosInvalidosException(
+            "El libro no puede ser null"
+        );
     }
 
+    this.libro = libro;
+}
     public EstadoLibro getEstadoLibro() {
         return estadoLibro;
     }

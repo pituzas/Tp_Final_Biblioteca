@@ -3,7 +3,6 @@ package dao;
 import Clases_Libros.Libro;
 import Excepciones.AccesoDatosException;
 import Excepciones.ElementoNoEncontradoException;
-import Excepciones.UsuarioNoEncontradoException;
 import Interfaces.DAO;
 import config.ConexionDB;
 
@@ -14,11 +13,11 @@ import java.util.List;
 
 public class LibroDAO implements DAO<Libro> {
 
-
     @Override
     public void insertar(Libro libro) throws AccesoDatosException {
 
         int filas = 0;
+
         String sql = """
                 INSERT INTO libros (id, nombre, autor, genero)
                 VALUES (?, ?, ?, ?)
@@ -33,8 +32,9 @@ public class LibroDAO implements DAO<Libro> {
             ps.setString(4, libro.getGenero());
 
             filas = ps.executeUpdate();
-            System.out.println("Filas modificadas:" + filas);
-            
+
+            System.out.println("Filas modificadas: " + filas);
+
         } catch (SQLException e) {
             throw new AccesoDatosException(
                     "Error al insertar el libro: " + e.getMessage()
@@ -48,17 +48,21 @@ public class LibroDAO implements DAO<Libro> {
     }
 
     @Override
-    public Libro buscarPorId(String codigo) throws AccesoDatosException, ElementoNoEncontradoException {
+    public Libro buscarPorId(String codigo)
+            throws AccesoDatosException, ElementoNoEncontradoException {
+
         return null;
     }
 
     @Override
-    public void actualizar(Libro h) throws AccesoDatosException, ElementoNoEncontradoException {
+    public void actualizar(Libro libro)
+            throws AccesoDatosException, ElementoNoEncontradoException {
 
     }
 
     @Override
-    public void eliminar(String codigo) throws AccesoDatosException, ElementoNoEncontradoException {
+    public void eliminar(String codigo)
+            throws AccesoDatosException, ElementoNoEncontradoException {
 
     }
 }

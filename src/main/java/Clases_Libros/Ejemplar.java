@@ -1,5 +1,6 @@
 package Clases_Libros;
 
+import Excepciones.DatosInvalidosException;
 import Interfaces.Prestado;
 
 import java.util.UUID;
@@ -14,9 +15,8 @@ public class Ejemplar implements Prestado {
 
     /// CONSTRUCTORES
     public Ejemplar(Libro libro) {
-        if (libro == null) {
-            throw new IllegalArgumentException("El libro no puede ser null.");
-        }
+        ///MOVI LA VALIDACION DEL ID QUE LO VALIDE DIRECTAMENTE EN EL SETTER Y NO EN EL CONSTRUCTOR.
+
         this.id = UUID.randomUUID();
         this.libro = libro;
         this.estadoLibro = EstadoLibro.DISPONIBLE;
@@ -32,16 +32,15 @@ public class Ejemplar implements Prestado {
         return libro;
     }
 
-    public void setLibro(Libro libro) {
-<<<<<<< HEAD
-=======
-        if(libro == null) {
-            throw new DatosInvalidosException("El libro no puede ser null");
-        }
->>>>>>> 043a097 (Implementacion DAO generico y persistencia JDBC)
-        this.libro = libro;
+public void setLibro(Libro libro) {
+    if (libro == null) {
+        throw new DatosInvalidosException(
+            "El libro no puede ser null"
+        );
     }
 
+    this.libro = libro;
+}
     public EstadoLibro getEstadoLibro() {
         return estadoLibro;
     }

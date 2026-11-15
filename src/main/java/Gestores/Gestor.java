@@ -1,3 +1,4 @@
+
 package Gestores;
 
 import Excepciones.DatosInvalidosException;
@@ -6,40 +7,60 @@ import Interfaces.Identificable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class  Gestor<T extends Identificable>{
-    protected List<T> elementos = new ArrayList<T>();
+public class Gestor<ID, T extends Identificable<ID>> {
 
-    public void agregar(T elemento){
-        if(elemento == null){
-            throw new DatosInvalidosException("No se puede agregar un elemento nulo");
+    protected List<T> elementos = new ArrayList<>();
+
+    // AGREGAR ELEMENTO
+    public void agregar(T elemento) {
+
+        if (elemento == null || elemento.getId() == null) {
+            throw new DatosInvalidosException(
+                    "El elemento o su ID no pueden ser nulos"
+            );
         }
-        if(elementos.contains(elemento)){
-            throw new DatosInvalidosException("El elemento ya existe");
+
+        for (T existente : elementos) {
+            if (Objects.equals(existente.getId(), elemento.getId())) {
+                throw new DatosInvalidosException(
+                        "El elemento ya existe"
+                );
+            }
         }
+
         elementos.add(elemento);
     }
-    public T buscar(String id) throws ElementoNoEncontradoException{
-        for(T elemento : elementos){
-            if(elemento.getId().equals(id)){
+
+    // BUSCAR ELEMENTO POR ID
+    public T buscar(ID id) throws ElementoNoEncontradoException {
+
+        for (T elemento : elementos) {
+            if (Objects.equals(elemento.getId(), id)) {
                 return elemento;
             }
         }
-        throw new ElementoNoEncontradoException(id);
+
+        throw new ElementoNoEncontradoException(
+                String.valueOf(id)
+        );
     }
-    public void eliminar(String id)throws ElementoNoEncontradoException{
-        for(T elemento : elementos){
-            if(elemento.getId().equals(id)){
-                elementos.remove(elemento);
-            }
-        }
+
+    // ELIMINAR ELEMENTO POR ID
+    public void eliminar(ID id) throws ElementoNoEncontradoException {
+
+        T elemento = buscar(id);
+        elementos.remove(elemento);
     }
-    public List<T> listar(){
+
+    // LISTAR ELEMENTOS
+    public List<T> listar() {
         return new ArrayList<>(elementos);
     }
 
-    public int cantidad(){
+    // CONTAR ELEMENTOS
+    public int cantidad() {
         return elementos.size();
     }
-
 }

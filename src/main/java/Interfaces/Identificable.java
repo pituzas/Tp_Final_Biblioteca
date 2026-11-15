@@ -1,5 +1,5 @@
 package Interfaces;
 
-public interface Identificable {
-    String getId();
+public interface Identificable<ID> {
+    ID getId();
 }

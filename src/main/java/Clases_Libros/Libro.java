@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 
-public abstract class Libro implements Identificable {
+public abstract class Libro implements Identificable<UUID> {
     private UUID id;
     private String nombre;
     private String autor;

@@ -1,11 +1,27 @@
 package Clases_Persona;
 import Enum.EstadoPrestamo;
+import Interfaces.Identificable;
 
-public class Usuario extends Persona{
+public class Usuario extends Persona implements Identificable {
     EstadoPrestamo estado;
+    String idSocio;
     public Usuario(String nombre, String dni, String direccion, String contacto, String idSocio) {
         super(nombre, dni, direccion, contacto);
         this.estado=EstadoPrestamo.CANCELADO;
+        this.idSocio=idSocio;
+    }
+
+    public String getIdSocio() {
+        return idSocio;
+    }
+
+    @Override
+    public String getId() {
+        return idSocio;
+    }
+
+    public void setIdSocio(String idSocio) {
+        this.idSocio = idSocio;
     }
 
     public EstadoPrestamo getEstado() {

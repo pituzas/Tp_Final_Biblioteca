@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import Enum.EstadoLibro;
 import Enum.EstadoPrestamo;
+import Excepciones.DatosInvalidosException;
 
 public class Prestamo {
     private UUID idPrestamo;
@@ -21,14 +22,6 @@ public class Prestamo {
     /// CONSTRUCTOR
 
     public Prestamo(UUID idPrestamo, Ejemplar ejemplar, Usuario usuario, LocalDateTime fechaPrestamo) {
-
-        if (ejemplar == null || usuario == null) {
-            throw new IllegalArgumentException("Usuario o Ejemplar nulos.");
-        }
-        if (!ejemplar.estaDispo()) {
-            throw new IllegalArgumentException("El ejemplar no esta disponible");
-        }
-
 
         this.idPrestamo = UUID.randomUUID();
         this.ejemplar = ejemplar;
@@ -53,6 +46,12 @@ public class Prestamo {
     }
 
     public void setEjemplar(Ejemplar ejemplar) {
+        if (ejemplar == null || usuario == null) {
+            throw new DatosInvalidosException("Usuario o Ejemplar nulos.");
+        }
+        if (!ejemplar.estaDispo()) {
+            throw new DatosInvalidosException("El ejemplar no esta disponible");
+        }
         this.ejemplar = ejemplar;
     }
 

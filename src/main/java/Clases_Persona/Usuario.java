@@ -3,7 +3,7 @@ package Clases_Persona;
 import Enum.EstadoPrestamo;
 import Interfaces.Identificable;
 
-public class Usuario extends Persona implements Identificable {
+public class Usuario extends Persona implements Identificable<String> {
     EstadoPrestamo estado;
     private String idSocio;
 

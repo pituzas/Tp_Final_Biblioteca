@@ -1,4 +1,5 @@
 package Clases_Persona;
 
-public class Admin {
+public class Admin extends Persona {
+
 }

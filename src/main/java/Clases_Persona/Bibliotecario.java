@@ -1,9 +1,9 @@
 package Clases_Persona;
 
-public class bibliotecario {
+public class Bibliotecario extends Persona {
     private static int legajo;
 
-    public bibliotecario() {
+    public Bibliotecario() {
         this.legajo=legajo++;
     }
 

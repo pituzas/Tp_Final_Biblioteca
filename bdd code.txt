@@ -1,0 +1,59 @@
+
+-- CREAR BASE DE DATOS
+CREATE DATABASE IF NOT EXISTS biblioteca_db;
+
+USE biblioteca_db;
+
+-- 1. TABLA LIBROS
+CREATE TABLE IF NOT EXISTS libros (
+    id CHAR(36) PRIMARY KEY,
+    nombre VARCHAR(150) NOT NULL,
+    autor VARCHAR(150) NOT NULL,
+    genero VARCHAR(100) NOT NULL
+) ENGINE=InnoDB;
+
+
+-- 2. TABLA USUARIOS
+CREATE TABLE IF NOT EXISTS usuarios (
+    idSocio VARCHAR(50) PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    dni VARCHAR(20) NOT NULL,
+    direccion VARCHAR(200) NOT NULL,
+    contacto VARCHAR(100) NOT NULL
+) ENGINE=InnoDB;
+
+
+-- 3. TABLA EJEMPLARES
+CREATE TABLE IF NOT EXISTS ejemplares (
+    id CHAR(36) PRIMARY KEY,
+    libro_id CHAR(36) NOT NULL,
+    estado VARCHAR(30) NOT NULL,
+
+    CONSTRAINT fk_ejemplar_libro
+        FOREIGN KEY (libro_id)
+        REFERENCES libros(id)
+) ENGINE=InnoDB;
+
+
+-- 4. TABLA PRESTAMOS
+CREATE TABLE IF NOT EXISTS prestamos (
+    idPrestamo CHAR(36) PRIMARY KEY,
+    ejemplar CHAR(36) NOT NULL,
+    usuario VARCHAR(50) NOT NULL,
+    fechaPrestamo DATETIME NOT NULL,
+    fechaVencimiento DATETIME NOT NULL,
+    fechaDevolucion DATETIME NULL,
+    estadoPrestamo VARCHAR(30) NOT NULL,
+
+    CONSTRAINT fk_prestamo_ejemplar
+        FOREIGN KEY (ejemplar)
+        REFERENCES ejemplares(id),
+
+    CONSTRAINT fk_prestamo_usuario
+        FOREIGN KEY (usuario)
+        REFERENCES usuarios(idSocio)
+) ENGINE=InnoDB;
+
+
+-- VERIFICAR QUE SE CREARON
+SHOW TABLES;

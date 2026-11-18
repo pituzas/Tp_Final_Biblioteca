@@ -28,11 +28,8 @@ public class PrestamoDAO implements DAO<Prestamo> {
             ps.setString(2, elemento.getEjemplar().getId().toString());
             ps.setString(3, elemento.getUsuario().getIdSocio());
 
-            ps.setTimestamp(4,
-                    Timestamp.valueOf(elemento.getFechaPrestamo()));
-
-            ps.setTimestamp(5,
-                    Timestamp.valueOf(elemento.getFechaVencimiento()));
+            ps.setTimestamp(4, Timestamp.valueOf(elemento.getFechaPrestamo()));
+            ps.setTimestamp(5, Timestamp.valueOf(elemento.getFechaVencimiento()));
 
             if (elemento.getFechaDevolucion() == null) {
                 ps.setNull(6, Types.TIMESTAMP);

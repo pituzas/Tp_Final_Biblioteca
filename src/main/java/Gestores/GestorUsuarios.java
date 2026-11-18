@@ -19,6 +19,7 @@ public List<Usuario> listarPorPrestamo(int idPrestamo)
     return  listaUsuario;
 }
 
+///COMPLETAR
 
 
 }

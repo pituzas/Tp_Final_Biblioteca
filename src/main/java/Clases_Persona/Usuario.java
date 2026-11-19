@@ -5,7 +5,7 @@ import Interfaces.Identificable;
 public class Usuario extends Persona implements Identificable {
     EstadoPrestamo estado;
     String idSocio;
-    public Usuario(String nombre, String dni, String direccion, String contacto, String idSocio) {
+    public Usuario(String nombre, String dni, String direccion, String contacto) {
         super(nombre, dni, direccion, contacto);
         this.estado=EstadoPrestamo.CANCELADO;
         this.idSocio=idSocio;

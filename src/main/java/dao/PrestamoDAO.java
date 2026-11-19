@@ -112,8 +112,7 @@ public class PrestamoDAO implements DAO<Prestamo> {
     private Prestamo crearPrestamo(ResultSet rs) throws SQLException {
         Ejemplar ejemplar = null;
         Usuario usuario = null;
-        String idPrestamoStr = rs.getString("idPrestamo");
-        UUID idPrestamo = UUID.fromString(idPrestamoStr);
+
         String idEjemplar = rs.getString("ejemplar");
         String idUsuario = rs.getString("usuario");
         Timestamp timestamp = rs.getTimestamp("fechaPrestamo");
@@ -128,7 +127,7 @@ public class PrestamoDAO implements DAO<Prestamo> {
             System.out.println(e.getMessage());
 
         }
-        return new Prestamo(idPrestamo, ejemplar, usuario, fechaPrestamo);
+        return new Prestamo(ejemplar, usuario, fechaPrestamo);
 
 
     }

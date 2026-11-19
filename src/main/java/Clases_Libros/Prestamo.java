@@ -10,7 +10,7 @@ import Enum.EstadoPrestamo;
 import Excepciones.DatosInvalidosException;
 
 public class Prestamo {
-    private UUID idPrestamo;
+    private static String idPrestamo;
     private Ejemplar ejemplar;
     private Usuario usuario;
     private EstadoPrestamo estadoPrestamo;
@@ -21,9 +21,9 @@ public class Prestamo {
 
     /// CONSTRUCTOR
 
-    public Prestamo(UUID idPrestamo, Ejemplar ejemplar, Usuario usuario, LocalDateTime fechaPrestamo) {
+    public Prestamo(Ejemplar ejemplar, Usuario usuario, LocalDateTime fechaPrestamo) {
 
-        this.idPrestamo = UUID.randomUUID();
+        this.idPrestamo = idPrestamo;
         this.ejemplar = ejemplar;
         this.usuario = usuario;
         this.estadoPrestamo = EstadoPrestamo.ACTIVO;
@@ -36,7 +36,7 @@ public class Prestamo {
 
 
     /// GETTERS Y SETTERS
-    public UUID getIdPrestamo() {
+    public String getIdPrestamo() {
         return idPrestamo;
     }
 

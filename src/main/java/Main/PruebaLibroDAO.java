@@ -5,6 +5,7 @@ import Clases_Persona.Usuario;
 import Excepciones.AccesoDatosException;
 import dao.LibroDAO;
 import dao.UsuarioDAO;
+import Enum.EstadoLibro;
 
 public class PruebaLibroDAO {
 
@@ -13,7 +14,7 @@ public class PruebaLibroDAO {
         UsuarioDAO usuarioDAO = new UsuarioDAO();
 
         try {
-            Usuario usuario = new Usuario("Lucio", "46206064", "Falucho 3029", "luciolive9@gmail.ocm", "1");
+            Usuario usuario = new Usuario("Lucio", "46206064", "Falucho 3029", "luciolive9@gmail.ocm", 1);
             usuarioDAO.insertar(usuario);
         } catch (AccesoDatosException e) {
             System.out.println("ERROR:" + e.getMessage()); ///CORREGIR CATCH
@@ -26,7 +27,9 @@ public class PruebaLibroDAO {
             Libro libro = new Libro(
                     "El Principito",
                     "Antoine de Saint-Exupéry",
-                    "Novela"
+                    "Novela",
+                    true,
+                    EstadoLibro.DISPONIBLE
             );
 
             // Guardarlo en MySQL

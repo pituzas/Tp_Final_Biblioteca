@@ -13,23 +13,34 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
 
 public class PrestamoDAO implements DAO<Prestamo> {
     @Override
     public void insertar(Prestamo elemento) throws AccesoDatosException {
+
         int filas = 0;
-        String sql = "INSERT INTO prestamos(idPrestamo, ejemplar, usuario, fechaPrestamo,fechaVencimiento, fechaDevolucion, estadoPrestamo)VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        String sql = "INSERT INTO prestamos(idPrestamo, ejemplar, usuario, fechaPrestamo, fechaVencimiento, fechaDevolucion, estadoPrestamo) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = ConexionDB.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, elemento.getIdPrestamo().toString());
-            ps.setString(2, elemento.getEjemplar().getId().toString());
-            ps.setString(3, elemento.getUsuario().getIdSocio());
+            // MODIFICADO: antes ps.setString() con UUID
+            ps.setInt(1, elemento.getIdPrestamo());
 
-            ps.setTimestamp(4, Timestamp.valueOf(elemento.getFechaPrestamo()));
-            ps.setTimestamp(5, Timestamp.valueOf(elemento.getFechaVencimiento()));
+            // MODIFICADO: ID del ejemplar ahora es Integer
+            ps.setInt(2, elemento.getEjemplar().getId());
+
+            // MODIFICADO: ID del usuario ahora es Integer
+            ps.setInt(3, elemento.getUsuario().getIdSocio());
+
+            // SIN CAMBIOS: fechas
+            ps.setTimestamp(4,
+                    Timestamp.valueOf(elemento.getFechaPrestamo()));
+
+            ps.setTimestamp(5,
+                    Timestamp.valueOf(elemento.getFechaVencimiento()));
 
             if (elemento.getFechaDevolucion() == null) {
                 ps.setNull(6, Types.TIMESTAMP);
@@ -38,14 +49,16 @@ public class PrestamoDAO implements DAO<Prestamo> {
                         Timestamp.valueOf(elemento.getFechaDevolucion()));
             }
 
+            // SIN CAMBIOS: estado del prestamo
             ps.setString(7, elemento.getEstadoPrestamo().name());
 
             filas = ps.executeUpdate();
             System.out.println("Filas modificadas: " + filas);
 
-
         } catch (SQLException e) {
-            throw new AccesoDatosException(e.getMessage());
+            throw new AccesoDatosException(
+                    "Error al insertar el préstamo: " + e.getMessage()
+            );
         }
     }
 
@@ -67,14 +80,16 @@ public class PrestamoDAO implements DAO<Prestamo> {
 
 
     @Override
-    public Prestamo buscarPorId(String id) throws AccesoDatosException, ElementoNoEncontradoException {
+    public Prestamo buscarPorId(int id)
+            throws AccesoDatosException, ElementoNoEncontradoException {
 
         String sql = "SELECT * FROM prestamos WHERE idPrestamo = ?";
 
         try (Connection con = ConexionDB.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, id);
+            // MODIFICADO: antes ps.setString(1, id)
+            ps.setInt(1, id);
 
             try (ResultSet rs = ps.executeQuery()) {
 
@@ -94,7 +109,8 @@ public class PrestamoDAO implements DAO<Prestamo> {
 
 
     @Override
-    public void actualizar(Prestamo elemento) throws AccesoDatosException, ElementoNoEncontradoException {
+    public void actualizar(Prestamo elemento)
+            throws AccesoDatosException, ElementoNoEncontradoException {
 
         int filas;
 
@@ -109,9 +125,13 @@ public class PrestamoDAO implements DAO<Prestamo> {
         try (Connection con = ConexionDB.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, elemento.getEjemplar().getId().toString());
-            ps.setString(2, elemento.getUsuario().getIdSocio());
+            // MODIFICADO: ID del ejemplar
+            ps.setInt(1, elemento.getEjemplar().getId());
 
+            // MODIFICADO: ID del usuario
+            ps.setInt(2, elemento.getUsuario().getIdSocio());
+
+            // SIN CAMBIOS: fechas
             ps.setTimestamp(3,
                     Timestamp.valueOf(elemento.getFechaPrestamo()));
 
@@ -125,8 +145,11 @@ public class PrestamoDAO implements DAO<Prestamo> {
                         Timestamp.valueOf(elemento.getFechaDevolucion()));
             }
 
+            // SIN CAMBIOS: estado del préstamo
             ps.setString(6, elemento.getEstadoPrestamo().name());
-            ps.setString(7, elemento.getIdPrestamo().toString());
+
+            // MODIFICADO: antes setString() con UUID
+            ps.setInt(7, elemento.getIdPrestamo());
 
             filas = ps.executeUpdate();
 
@@ -137,51 +160,52 @@ public class PrestamoDAO implements DAO<Prestamo> {
         }
 
         if (filas == 0) {
-            throw new ElementoNoEncontradoException(
-                    elemento.getIdPrestamo().toString()
-            );
+            throw new ElementoNoEncontradoException(elemento.getIdPrestamo() );
         }
     }
 
-
     @Override
-    public void eliminar(String id) throws AccesoDatosException, ElementoNoEncontradoException {
+    public void eliminar(int id)
+            throws AccesoDatosException, ElementoNoEncontradoException {
+
         int filas;
+
         String sql = "DELETE FROM prestamos WHERE idPrestamo = ?";
+
         try (Connection con = ConexionDB.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, id);
+
+            // MODIFICADO: antes setString()
+            ps.setInt(1, id);
+
             filas = ps.executeUpdate();
 
         } catch (SQLException e) {
-            throw new AccesoDatosException(e.getMessage());
-
+            throw new AccesoDatosException(
+                    "Error al eliminar el préstamo: " + e.getMessage()
+            );
         }
+
         if (filas == 0) {
             throw new ElementoNoEncontradoException(id);
         }
-
     }
-    private Prestamo crearPrestamo(ResultSet rs) throws SQLException {
-        Ejemplar ejemplar = null;
-        Usuario usuario = null;
 
+    private Prestamo crearPrestamo(ResultSet rs)
+            throws SQLException, AccesoDatosException {
 
-    private Prestamo crearPrestamo(ResultSet rs) throws SQLException, AccesoDatosException {
+        // MODIFICADO: antes UUID.fromString()
+        Integer idPrestamo = rs.getInt("idPrestamo");
 
-        UUID idPrestamo = UUID.fromString(
-                rs.getString("idPrestamo")
-        );
+        // MODIFICADO: antes eran String
+        Integer idEjemplar = rs.getInt("ejemplar");
+        Integer idUsuario = rs.getInt("usuario");
 
-        String idEjemplar = rs.getString("ejemplar");
-        String idUsuario = rs.getString("usuario");
-
+        // SIN CAMBIOS: fechas
         LocalDateTime fechaPrestamo = rs
                 .getTimestamp("fechaPrestamo")
                 .toLocalDateTime();
 
-        }
-        return new Prestamo(ejemplar, usuario, fechaPrestamo);
         LocalDateTime fechaVencimiento = rs
                 .getTimestamp("fechaVencimiento")
                 .toLocalDateTime();
@@ -194,6 +218,7 @@ public class PrestamoDAO implements DAO<Prestamo> {
                         ? null
                         : timestampDevolucion.toLocalDateTime();
 
+        // SIN CAMBIOS: enum
         EstadoPrestamo estadoPrestamo = EstadoPrestamo.valueOf(
                 rs.getString("estadoPrestamo")
         );
@@ -202,10 +227,22 @@ public class PrestamoDAO implements DAO<Prestamo> {
         UsuarioDAO usuarioDAO = new UsuarioDAO();
 
         try {
+            // MODIFICADO: conversión temporal a String
             Ejemplar ejemplar = ejemplarDAO.buscarPorId(idEjemplar);
+
+            // MODIFICADO: conversión temporal a String
             Usuario usuario = usuarioDAO.buscarPorId(idUsuario);
 
-            return new Prestamo(idPrestamo, ejemplar, usuario, fechaPrestamo, fechaVencimiento, fechaDevolucion, estadoPrestamo);
+            // MODIFICADO: constructor con Integer idPrestamo
+            return new Prestamo(
+                    idPrestamo,
+                    ejemplar,
+                    usuario,
+                    fechaPrestamo,
+                    fechaVencimiento,
+                    fechaDevolucion,
+                    estadoPrestamo
+            );
 
         } catch (ElementoNoEncontradoException e) {
             throw new AccesoDatosException(
@@ -213,5 +250,4 @@ public class PrestamoDAO implements DAO<Prestamo> {
             );
         }
     }
-
 }

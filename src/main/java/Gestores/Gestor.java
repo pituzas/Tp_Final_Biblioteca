@@ -34,7 +34,7 @@ public class Gestor<ID, T extends Identificable<ID>> {
     }
 
     // BUSCAR ELEMENTO POR ID
-    public T buscar(ID id) throws ElementoNoEncontradoException {
+    public T buscar(int id) throws ElementoNoEncontradoException {
 
         for (T elemento : elementos) {
             if (Objects.equals(elemento.getId(), id)) {
@@ -42,13 +42,11 @@ public class Gestor<ID, T extends Identificable<ID>> {
             }
         }
 
-        throw new ElementoNoEncontradoException(
-                String.valueOf(id)
-        );
+        throw new ElementoNoEncontradoException(id);
     }
 
     // ELIMINAR ELEMENTO POR ID
-    public void eliminar(ID id) throws ElementoNoEncontradoException {
+    public void eliminar(int id) throws ElementoNoEncontradoException {
 
         T elemento = buscar(id);
         elementos.remove(elemento);

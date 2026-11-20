@@ -14,7 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
 
 public class EjemplarDAO implements DAO<Ejemplar> {
 
@@ -27,8 +27,8 @@ public class EjemplarDAO implements DAO<Ejemplar> {
         try (Connection con = ConexionDB.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, elemento.getId().toString());
-            ps.setString(2, elemento.getLibro().getId().toString());
+            ps.setInt(1, elemento.getId());
+            ps.setInt(2, elemento.getLibro().getId());
             ps.setString(3, elemento.getEstadoLibro().name());
 
             filas = ps.executeUpdate();
@@ -39,8 +39,8 @@ public class EjemplarDAO implements DAO<Ejemplar> {
     }
 
     private Ejemplar crearEjemplar(ResultSet rs) throws SQLException, AccesoDatosException, ElementoNoEncontradoException {
-        UUID id = UUID.fromString(rs.getString("id"));
-        String libroId = rs.getString("libro_id");
+        Integer id = rs.getInt("id");
+        Integer libroId = rs.getInt("libro_id");
         EstadoLibro estado = EstadoLibro.valueOf(rs.getString("estado"));
 
         LibroDAO libroDAO = new LibroDAO();
@@ -72,13 +72,13 @@ public class EjemplarDAO implements DAO<Ejemplar> {
     }
 
     @Override
-    public Ejemplar buscarPorId(String id) throws AccesoDatosException, ElementoNoEncontradoException {
+    public Ejemplar buscarPorId(int id) throws AccesoDatosException, ElementoNoEncontradoException {
         String sql = "SELECT * FROM ejemplares WHERE id = ?";
 
         try (Connection con = ConexionDB.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, id);
+            ps.setInt(1, id);
 
             try (ResultSet rs = ps.executeQuery()) {
 
@@ -112,9 +112,11 @@ public class EjemplarDAO implements DAO<Ejemplar> {
         try (Connection con = ConexionDB.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, elemento.getLibro().getId().toString());
+// MODIFICADO: ID del libro ahora es Integer
+            ps.setInt(1, elemento.getLibro().getId());
             ps.setString(2, elemento.getEstadoLibro().name());
-            ps.setString(3, elemento.getId().toString());
+// MODIFICADO: ID del ejemplar ahora es Integer
+            ps.setInt(3, elemento.getId());
 
             filas = ps.executeUpdate();
 
@@ -125,14 +127,12 @@ public class EjemplarDAO implements DAO<Ejemplar> {
         }
 
         if (filas == 0) {
-            throw new ElementoNoEncontradoException(
-                    elemento.getId().toString()
-            );
+            throw new ElementoNoEncontradoException(elemento.getId());
         }
     }
 
     @Override
-    public void eliminar(String id) throws AccesoDatosException, ElementoNoEncontradoException {
+    public void eliminar(int id) throws AccesoDatosException, ElementoNoEncontradoException {
 
         int filas;
 
@@ -141,7 +141,7 @@ public class EjemplarDAO implements DAO<Ejemplar> {
         try (Connection con = ConexionDB.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, id);
+            ps.setInt(1, id);
 
             filas = ps.executeUpdate();
 

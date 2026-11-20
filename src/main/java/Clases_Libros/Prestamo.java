@@ -3,14 +3,15 @@ package Clases_Libros;
 import Clases_Persona.Usuario;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+
 
 import Enum.EstadoLibro;
 import Enum.EstadoPrestamo;
 import Excepciones.DatosInvalidosException;
 
 public class Prestamo {
-    private static String idPrestamo;
+    private static int contador=1;
+    private Integer idPrestamo;
     private Ejemplar ejemplar;
     private Usuario usuario;
     private EstadoPrestamo estadoPrestamo;
@@ -22,21 +23,21 @@ public class Prestamo {
     /// CONSTRUCTOR
 
 
-    public Prestamo(Ejemplar ejemplar, Usuario usuario, LocalDateTime fechaPrestamo) {
-
     public Prestamo(Ejemplar ejemplar, Usuario usuario,
                     LocalDateTime fechaVencimiento) {
 
         if (ejemplar == null || usuario == null) {
-            throw new DatosInvalidosException("El ejemplar y el usuario no pueden ser nulos");
+            throw new DatosInvalidosException(
+                    "El ejemplar y el usuario no pueden ser nulos"
+            );
         }
 
         if (!ejemplar.estaDispo()) {
-            throw new DatosInvalidosException("El ejemplar no está disponible");
+            throw new DatosInvalidosException(
+                    "El ejemplar no está disponible"
+            );
         }
 
-
-        this.idPrestamo = idPrestamo;
         this.ejemplar = ejemplar;
         this.usuario = usuario;
         this.estadoPrestamo = EstadoPrestamo.ACTIVO;
@@ -46,17 +47,23 @@ public class Prestamo {
 
         this.fechaDevolucion = null;
 
+        // MODIFICADO: antes UUID.randomUUID()
+        this.idPrestamo = contador++;
+
         ejemplar.setEstadoLibro(EstadoLibro.PRESTADO);
     }
 
-    public Prestamo(UUID idPrestamo, Ejemplar ejemplar,
+    // MODIFICADO: UUID idPrestamo -> Integer idPrestamo
+    public Prestamo(Integer idPrestamo, Ejemplar ejemplar,
                     Usuario usuario, LocalDateTime fechaPrestamo,
                     LocalDateTime fechaVencimiento,
                     LocalDateTime fechaDevolucion,
                     EstadoPrestamo estadoPrestamo) {
 
-        if (idPrestamo == null || ejemplar == null ||
-                usuario == null || fechaPrestamo == null ||
+        // MODIFICADO: también validamos que el ID sea positivo
+        if (idPrestamo == null || idPrestamo <= 0 ||
+                ejemplar == null || usuario == null ||
+                fechaPrestamo == null ||
                 fechaVencimiento == null || estadoPrestamo == null) {
 
             throw new DatosInvalidosException(
@@ -77,11 +84,16 @@ public class Prestamo {
         this.fechaVencimiento = fechaVencimiento;
         this.fechaDevolucion = fechaDevolucion;
         this.estadoPrestamo = estadoPrestamo;
+
+        // NUEVO: actualizar contador sin generar otro ID
+        if (idPrestamo >= contador) {
+            contador = idPrestamo + 1;
+        }
     }
 
 
     /// GETTERS Y SETTERS
-    public String getIdPrestamo() {
+    public Integer getIdPrestamo() {
         return idPrestamo;
     }
 

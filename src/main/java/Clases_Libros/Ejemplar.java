@@ -3,12 +3,12 @@ package Clases_Libros;
 import Excepciones.DatosInvalidosException;
 import Interfaces.Prestado;
 
-import java.util.UUID;
 
 import Enum.EstadoLibro;
 
 public class Ejemplar implements Prestado {
-    private UUID id;
+    private static int contador = 1;
+    private Integer id;
     private Libro libro;
     private EstadoLibro estadoLibro;
 
@@ -16,24 +16,28 @@ public class Ejemplar implements Prestado {
     /// CONSTRUCTORES
     public Ejemplar(Libro libro) {
         ///MOVI LA VALIDACION DEL ID QUE LO VALIDE DIRECTAMENTE EN EL SETTER Y NO EN EL CONSTRUCTOR.
-
-        this.id = UUID.randomUUID();
         setLibro(libro);
+        this.id = contador++;
+
         this.estadoLibro = EstadoLibro.DISPONIBLE;
     }
 
-    public Ejemplar(UUID id, Libro libro, EstadoLibro estadoLibro) {
+    public Ejemplar(Integer id, Libro libro, EstadoLibro estadoLibro) {
 
-        if (id == null) {
-            throw new DatosInvalidosException("El id no puede ser null");
+        if (id == null || id <= 0) {
+            throw new DatosInvalidosException("El id no puede ser null o negativo ");
         }
         this.id = id;
         setLibro(libro);
         setEstadoLibro(estadoLibro);
+
+        if (id >= contador) {
+            contador = id + 1;
+        }
     }
 
     /// GETTERS Y SETTERS
-    public UUID getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -65,13 +69,7 @@ public class Ejemplar implements Prestado {
     /// INTERFACE
     @Override
     public boolean estaDispo() {
-        if (estadoLibro == EstadoLibro.DISPONIBLE) {
-            System.out.println("El libro" + getLibro().getNombre() + "id :" + getId() + "Esta Disponible.");
-            return true;
-        } else {
-            System.out.println("EL libro no se encuentra disponible. Estado:" + getEstadoLibro());
-            return false;
-        }
+        return estadoLibro == EstadoLibro.DISPONIBLE;
     }
 
     @Override

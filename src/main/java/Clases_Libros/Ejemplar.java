@@ -18,10 +18,19 @@ public class Ejemplar implements Prestado {
         ///MOVI LA VALIDACION DEL ID QUE LO VALIDE DIRECTAMENTE EN EL SETTER Y NO EN EL CONSTRUCTOR.
 
         this.id = UUID.randomUUID();
-        this.libro = libro;
+        setLibro(libro);
         this.estadoLibro = EstadoLibro.DISPONIBLE;
     }
 
+    public Ejemplar(UUID id, Libro libro, EstadoLibro estadoLibro) {
+
+        if (id == null) {
+            throw new DatosInvalidosException("El id no puede ser null");
+        }
+        this.id = id;
+        setLibro(libro);
+        setEstadoLibro(estadoLibro);
+    }
 
     /// GETTERS Y SETTERS
     public UUID getId() {
@@ -32,15 +41,16 @@ public class Ejemplar implements Prestado {
         return libro;
     }
 
-public void setLibro(Libro libro) {
-    if (libro == null) {
-        throw new DatosInvalidosException(
-            "El libro no puede ser null"
-        );
+    public void setLibro(Libro libro) {
+        if (libro == null) {
+            throw new DatosInvalidosException(
+                    "El libro no puede ser null"
+            );
+        }
+
+        this.libro = libro;
     }
 
-    this.libro = libro;
-}
     public EstadoLibro getEstadoLibro() {
         return estadoLibro;
     }

@@ -57,7 +57,7 @@ public class UsuarioDAO implements DAO<Usuario> {
 
     @Override
     public Usuario buscarPorId(String id) throws AccesoDatosException, ElementoNoEncontradoException {
-        String sql = "SELECT * FROM usuarios WHERE id = ?";
+        String sql = "SELECT * FROM usuarios WHERE idSocio = ?";
         try(Connection con = ConexionDB.getConexion();
         PreparedStatement ps = con.prepareStatement(sql)){
             ps.setString(1,id);
@@ -76,7 +76,7 @@ public class UsuarioDAO implements DAO<Usuario> {
     @Override
     public void actualizar(Usuario elemento) throws AccesoDatosException, ElementoNoEncontradoException {
     int filas;
-    String sql = "UPDATE usuarios SET nombre = ?,direccion = ?,contacto =? WHERE id = ?";
+    String sql = "UPDATE usuarios SET nombre = ?,direccion = ?,contacto =? WHERE idSocio = ?";
     try(Connection con = ConexionDB.getConexion();
     PreparedStatement ps = con.prepareStatement(sql)){
         ps.setString(1,elemento.getNombre());
@@ -99,7 +99,7 @@ public class UsuarioDAO implements DAO<Usuario> {
     @Override
     public void eliminar(String id) throws AccesoDatosException, ElementoNoEncontradoException {
     int filas;
-    String sql = "DELETE FROM usuarios WHERE id = ?";
+    String sql = "DELETE FROM usuarios WHERE idSocio = ?";
     try(Connection con = ConexionDB.getConexion();
         PreparedStatement ps = con.prepareStatement(sql)){
         ps.setString(1,id);

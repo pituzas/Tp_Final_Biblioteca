@@ -8,5 +8,5 @@ import java.util.List;
 
 public class GestorLibros<T extends Libro>{
 
-
+///COMPLETAR
 }

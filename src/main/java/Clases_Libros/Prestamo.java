@@ -21,17 +21,62 @@ public class Prestamo {
 
     /// CONSTRUCTOR
 
+
     public Prestamo(Ejemplar ejemplar, Usuario usuario, LocalDateTime fechaPrestamo) {
+
+    public Prestamo(Ejemplar ejemplar, Usuario usuario,
+                    LocalDateTime fechaVencimiento) {
+
+        if (ejemplar == null || usuario == null) {
+            throw new DatosInvalidosException("El ejemplar y el usuario no pueden ser nulos");
+        }
+
+        if (!ejemplar.estaDispo()) {
+            throw new DatosInvalidosException("El ejemplar no está disponible");
+        }
+
 
         this.idPrestamo = idPrestamo;
         this.ejemplar = ejemplar;
         this.usuario = usuario;
         this.estadoPrestamo = EstadoPrestamo.ACTIVO;
         this.fechaPrestamo = LocalDateTime.now();
-        this.fechaVencimiento = fechaVencimiento;
+
+        setFechaVencimiento(fechaVencimiento);
+
         this.fechaDevolucion = null;
 
         ejemplar.setEstadoLibro(EstadoLibro.PRESTADO);
+    }
+
+    public Prestamo(UUID idPrestamo, Ejemplar ejemplar,
+                    Usuario usuario, LocalDateTime fechaPrestamo,
+                    LocalDateTime fechaVencimiento,
+                    LocalDateTime fechaDevolucion,
+                    EstadoPrestamo estadoPrestamo) {
+
+        if (idPrestamo == null || ejemplar == null ||
+                usuario == null || fechaPrestamo == null ||
+                fechaVencimiento == null || estadoPrestamo == null) {
+
+            throw new DatosInvalidosException(
+                    "Datos inválidos del préstamo"
+            );
+        }
+
+        if (!fechaVencimiento.isAfter(fechaPrestamo)) {
+            throw new DatosInvalidosException(
+                    "El vencimiento debe ser posterior al préstamo"
+            );
+        }
+
+        this.idPrestamo = idPrestamo;
+        this.ejemplar = ejemplar;
+        this.usuario = usuario;
+        this.fechaPrestamo = fechaPrestamo;
+        this.fechaVencimiento = fechaVencimiento;
+        this.fechaDevolucion = fechaDevolucion;
+        this.estadoPrestamo = estadoPrestamo;
     }
 
 
@@ -45,21 +90,17 @@ public class Prestamo {
         return ejemplar;
     }
 
-    public void setEjemplar(Ejemplar ejemplar) {
-        if (ejemplar == null || usuario == null) {
-            throw new DatosInvalidosException("Usuario o Ejemplar nulos.");
-        }
-        if (!ejemplar.estaDispo()) {
-            throw new DatosInvalidosException("El ejemplar no esta disponible");
-        }
-        this.ejemplar = ejemplar;
-    }
 
     public Usuario getUsuario() {
         return usuario;
     }
 
     public void setUsuario(Usuario usuario) {
+        if (usuario == null) {
+            throw new DatosInvalidosException(
+                    "El usuario no puede ser nulo"
+            );
+        }
         this.usuario = usuario;
     }
 
@@ -72,6 +113,14 @@ public class Prestamo {
     }
 
     public void setFechaVencimiento(LocalDateTime fechaVencimiento) {
+        if (fechaVencimiento == null ||
+                !fechaVencimiento.isAfter(fechaPrestamo)) {
+
+            throw new DatosInvalidosException(
+                    "La fecha de vencimiento debe ser posterior al préstamo"
+            );
+        }
+
         this.fechaVencimiento = fechaVencimiento;
     }
 
@@ -83,18 +132,37 @@ public class Prestamo {
         this.fechaDevolucion = fechaDevolucion;
     }
 
-    public void devolverEjemplar() {
-        if (estadoPrestamo == EstadoPrestamo.DEVUELTO) {
-            throw new IllegalArgumentException("El ejemplar ya fue devuelto!");
-        } else if (estadoPrestamo == EstadoPrestamo.CANCELADO) {
-            System.out.println("Te excediste de la fecha de devolucion, que no vuelva a ocurrir.");
+    public EstadoPrestamo getEstadoPrestamo() {
+        return estadoPrestamo;
+    }
 
-            ejemplar.setEstadoLibro(EstadoLibro.DISPONIBLE);
-            fechaDevolucion = LocalDateTime.now();
+    public boolean estaVencido() {
+        return estadoPrestamo == EstadoPrestamo.ACTIVO
+                && LocalDateTime.now().isAfter(fechaVencimiento);
+    }
+
+    public void devolverEjemplar() {
+
+        if (estadoPrestamo != EstadoPrestamo.ACTIVO) {
+            throw new DatosInvalidosException(
+                    "El préstamo no se encuentra activo"
+            );
+        }
+
+        this.fechaDevolucion = LocalDateTime.now();
+        this.estadoPrestamo = EstadoPrestamo.DEVUELTO;
+        this.ejemplar.setEstadoLibro(EstadoLibro.DISPONIBLE);
+
+        if (fechaDevolucion.isAfter(fechaVencimiento)) {
+            System.out.println(
+                    "El ejemplar fue devuelto fuera de término"
+            );
         } else {
-            ejemplar.setEstadoLibro(EstadoLibro.DISPONIBLE);
-            fechaDevolucion = LocalDateTime.now();
+            System.out.println(
+                    "El ejemplar fue devuelto correctamente"
+            );
         }
     }
+
 
 }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import Enum.EstadoPrestamo;
 
-public class GestorUsuarios extends Gestor<Usuario> {
+public class GestorUsuarios extends Gestor<String,Usuario> {
 
 public List<Usuario> listarPorPrestamo(int idPrestamo)
 {
@@ -19,6 +19,7 @@ public List<Usuario> listarPorPrestamo(int idPrestamo)
     return  listaUsuario;
 }
 
+///COMPLETAR
 
 
 }

@@ -1,14 +1,18 @@
 package Clases_Persona;
+
 import Enum.EstadoPrestamo;
 import Interfaces.Identificable;
 
-public class Usuario extends Persona implements Identificable {
+public class Usuario extends Persona implements Identificable<String> {
     EstadoPrestamo estado;
     String idSocio;
     public Usuario(String nombre, String dni, String direccion, String contacto) {
+    private String idSocio;
+
+    public Usuario(String nombre, String dni, String direccion, String contacto, String idSocio) {
         super(nombre, dni, direccion, contacto);
-        this.estado=EstadoPrestamo.CANCELADO;
-        this.idSocio=idSocio;
+        this.estado = EstadoPrestamo.CANCELADO;
+        this.idSocio = idSocio;
     }
 
     public String getIdSocio() {
@@ -24,6 +28,7 @@ public class Usuario extends Persona implements Identificable {
         this.idSocio = idSocio;
     }
 
+
     public EstadoPrestamo getEstado() {
         return estado;
     }
@@ -32,21 +37,20 @@ public class Usuario extends Persona implements Identificable {
         this.estado = estado;
     }
 
-    public boolean prestamo(){
-        if(EstadoPrestamo.ACTIVO!=this.estado)
-        return true;
+    public boolean prestamo() {
+        if (EstadoPrestamo.ACTIVO != this.estado)
+            return true;
         else
             return false;
     }
 
-    public boolean devolucion(){
-        if(this.estado==EstadoPrestamo.ACTIVO)
-        return true;
+    public boolean devolucion() {
+        if (this.estado == EstadoPrestamo.ACTIVO)
+            return true;
         else
             return false;
     }
 
 
-
-    }
+}
 

@@ -1,6 +1,7 @@
 package Main;
 
 import Excepciones.ElementoNoEncontradoException;
+import Menus.MenuPrincipal;
 import dao.LibroDAO;
 import Clases_Libros.Libro;
 import Excepciones.AccesoDatosException;
@@ -18,6 +19,9 @@ import Clases_Persona.Bibliotecario;
 
 public class Main {
     public static void main(String[] args) {
+
+        MenuPrincipal menuPrincipal = new MenuPrincipal();
+        menuPrincipal.iniciar();
 
         LibroDAO libroDAO = new LibroDAO();
 

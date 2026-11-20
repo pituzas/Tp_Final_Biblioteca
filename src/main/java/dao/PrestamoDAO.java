@@ -162,6 +162,9 @@ public class PrestamoDAO implements DAO<Prestamo> {
         }
 
     }
+    private Prestamo crearPrestamo(ResultSet rs) throws SQLException {
+        Ejemplar ejemplar = null;
+        Usuario usuario = null;
 
 
     private Prestamo crearPrestamo(ResultSet rs) throws SQLException, AccesoDatosException {
@@ -177,6 +180,8 @@ public class PrestamoDAO implements DAO<Prestamo> {
                 .getTimestamp("fechaPrestamo")
                 .toLocalDateTime();
 
+        }
+        return new Prestamo(ejemplar, usuario, fechaPrestamo);
         LocalDateTime fechaVencimiento = rs
                 .getTimestamp("fechaVencimiento")
                 .toLocalDateTime();

@@ -12,15 +12,19 @@ public class Libro implements Identificable<UUID> {
     private String nombre;
     private String autor;
     private String genero;
+    private boolean disponible;
+    private EstadoLibro estado;
 
 
     /// CONSTRUCTORES
-    public Libro(String nombre, String autor, String genero) {
+    public Libro(String nombre, String autor, String genero, boolean disponible,  EstadoLibro estado) {
 
         this.id = UUID.randomUUID();
         this.nombre = nombre;
         this.autor = autor;
         this.genero = genero;
+        this.estado = EstadoLibro.DISPONIBLE;
+        this.disponible = disponible;
     }
 
     public Libro(UUID id, String nombre, String autor, String genero) {
@@ -39,6 +43,24 @@ public class Libro implements Identificable<UUID> {
     public UUID getId() {
         return id;
     }
+
+    public boolean isDisponible() {
+        return disponible;
+    }
+
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
+    }
+
+    public EstadoLibro getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoLibro estado) {
+        this.estado = estado;
+    }
+
+
 
     public String getNombre() {
         return nombre;

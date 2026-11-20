@@ -118,9 +118,9 @@ throw new ElementoNoEncontradoException(id);
     String dni = rs.getString("dni");
     String direccion = rs.getString("direccion");
     String contacto = rs.getString("contacto");
-    String idSocio = rs.getString("idSocio");
 
-    return new Usuario(nombre,dni,direccion,contacto,idSocio);
+
+    return new Usuario(nombre,dni,direccion,contacto);
 
     }
 }

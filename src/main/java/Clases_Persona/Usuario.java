@@ -5,6 +5,8 @@ import Interfaces.Identificable;
 
 public class Usuario extends Persona implements Identificable<String> {
     EstadoPrestamo estado;
+    String idSocio;
+    public Usuario(String nombre, String dni, String direccion, String contacto) {
     private String idSocio;
 
     public Usuario(String nombre, String dni, String direccion, String contacto, String idSocio) {

@@ -1,7 +1,6 @@
 package Menus;
 
 import dao.LibroDAO;
-import dao.PrestamoDAO;
 import dao.UsuarioDAO;
 
 import java.util.Scanner;
@@ -16,7 +15,6 @@ import dao.EjemplarDAO;
 public class MenuBibliotecario {
     private Scanner scanner;
     private LibroDAO libroDAO;
-    private PrestamoDAO prestamoDAO;
     private UsuarioDAO usuarioDAO;
     private EjemplarDAO ejemplarDAO;
 
@@ -25,7 +23,6 @@ public class MenuBibliotecario {
     public MenuBibliotecario() {
         this.scanner = new Scanner(System.in);
         this.libroDAO = new LibroDAO();
-        this.prestamoDAO = new PrestamoDAO();
         this.usuarioDAO = new UsuarioDAO();
 
         this.ejemplarDAO = new EjemplarDAO(); ///Inicializamos el ejemoplarDAO
@@ -36,9 +33,8 @@ public class MenuBibliotecario {
         do {
             System.out.println("\n--- MENÚ BIBLIOTECARIO ---");
             System.out.println("1. Gestionar Libros y Ejemplares");
-            System.out.println("2. Registrar Préstamos y Devoluciones");
-            System.out.println("3. Gestionar Usuarios");
-            System.out.println("4. Volver al menú principal");
+            System.out.println("2. Gestionar Usuarios");
+            System.out.println("3. Volver al menú principal");
             System.out.print("Seleccione una opción: ");
 
             if (scanner.hasNextInt()) {
@@ -50,12 +46,9 @@ public class MenuBibliotecario {
                         sub_menuLibros();
                         break;
                     case 2:
-                        sub_menuPrestamos();
-                        break;
-                    case 3:
                         sub_menuUsuarios();
                         break;
-                    case 4:
+                    case 3:
                         System.out.println("Volviendo al menú principal...");
                         break;
                     default:
@@ -65,7 +58,7 @@ public class MenuBibliotecario {
                 System.out.println("\n[!] Ingrese un número válido.");
                 scanner.nextLine();
             }
-        } while (opcion != 4);
+        } while (opcion != 3);
     }
 
     private void sub_menuLibros() {
@@ -146,7 +139,6 @@ public class MenuBibliotecario {
     }
 
     private void sub_menuPrestamos() {
-        System.out.println("\n[Gestión de Préstamos conectada con PrestamoDAO]");
     }
 
     private void sub_menuUsuarios() {

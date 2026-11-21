@@ -1,23 +1,30 @@
 package Menus;
 
-
-
-import Clases_Persona.Usuario;
+import Clases_Libros.Ejemplar;
+import Clases_Libros.Prestamo;
+import Enum.EstadoPrestamo;
 import Excepciones.AccesoDatosException;
-import dao.LibroDAO;
+import Excepciones.DatosInvalidosException;
+import Excepciones.ElementoNoEncontradoException;
+import dao.EjemplarDAO;
+import dao.PrestamoDAO;
 import dao.UsuarioDAO;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuUsuario {
-    private Scanner scanner;
-    private LibroDAO libroDAO;
-    private UsuarioDAO usuarioDAO;
-
+    private final Scanner scanner;
+    private final EjemplarDAO ejemplarDAO;
+    private final PrestamoDAO prestamoDAO;
+    private final UsuarioDAO usuarioDAO;
 
     public MenuUsuario() {
         this.scanner = new Scanner(System.in);
-        this.libroDAO = new LibroDAO();
+        this.ejemplarDAO = new EjemplarDAO();
+        this.prestamoDAO = new PrestamoDAO();
+        this.usuarioDAO = new UsuarioDAO();
     }
 
     public void mostrarMenu() {
@@ -29,25 +36,15 @@ public class MenuUsuario {
             System.out.println("3. Volver al menú principal");
             System.out.print("Seleccione una opción: ");
 
-            if (scanner.hasNextInt()) {
-                opcion = scanner.nextInt();
-                scanner.nextLine();
+            try {
+                opcion = Integer.parseInt(scanner.nextLine().trim());
 
                 switch (opcion) {
                     case 1:
-                        try {
-                            System.out.println("\n[-- Listado de libros desde la base de datos --]");
-                            libroDAO.listarTodos();
-                        } catch (AccesoDatosException e) {
-                            System.out.println("ERROR: " + e.getMessage());
-                        }
+                        mostrarCatalogoDisponible();
                         break;
                     case 2:
-                        System.out.println("\n[-- Consulta de préstamos por usuario --]");
-
-
-
-
+                        mostrarPrestamosActivos();
                         break;
                     case 3:
                         System.out.println("Volviendo al menú principal...");
@@ -55,10 +52,54 @@ public class MenuUsuario {
                     default:
                         System.out.println("\n[!] Opción inválida.");
                 }
-            } else {
+            } catch (NumberFormatException e) {
                 System.out.println("\n[!] Ingrese un número válido.");
-                scanner.nextLine();
+            } catch (ElementoNoEncontradoException e) {
+                System.out.println("No encontrado: " + e.getMessage());
+            } catch (AccesoDatosException | DatosInvalidosException e) {
+                System.out.println("ERROR: " + e.getMessage());
             }
         } while (opcion != 3);
+    }
+
+    private void mostrarCatalogoDisponible() throws AccesoDatosException {
+        List<Integer> librosMostrados = new ArrayList<>();
+        System.out.println("\n--- LIBROS DISPONIBLES ---");
+
+        for (Ejemplar ejemplar : ejemplarDAO.listarTodos()) {
+            int idLibro = ejemplar.getLibro().getId();
+            if (ejemplar.estaDispo() && !librosMostrados.contains(idLibro)) {
+                librosMostrados.add(idLibro);
+                System.out.println(ejemplar.getLibro());
+            }
+        }
+
+        if (librosMostrados.isEmpty()) {
+            System.out.println("No hay libros disponibles.");
+        }
+    }
+
+    private void mostrarPrestamosActivos()
+            throws AccesoDatosException, ElementoNoEncontradoException {
+        System.out.print("Ingrese su ID de socio: ");
+        int idSocio = Integer.parseInt(scanner.nextLine().trim());
+        usuarioDAO.buscarPorId(idSocio);
+
+        System.out.println("\n--- MIS PRÉSTAMOS ACTIVOS ---");
+        boolean tienePrestamosActivos = false;
+        for (Prestamo prestamo : prestamoDAO.listarTodos()) {
+            if (prestamo.getUsuario().getIdSocio() == idSocio
+                    && prestamo.getEstadoPrestamo() == EstadoPrestamo.ACTIVO) {
+                System.out.println("ID: " + prestamo.getIdPrestamo()
+                        + " | Libro: " + prestamo.getEjemplar().getLibro().getNombre()
+                        + " | Préstamo: " + prestamo.getFechaPrestamo()
+                        + " | Vencimiento: " + prestamo.getFechaVencimiento());
+                tienePrestamosActivos = true;
+            }
+        }
+
+        if (!tienePrestamosActivos) {
+            System.out.println("No tenés préstamos activos.");
+        }
     }
 }

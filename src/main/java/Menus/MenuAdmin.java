@@ -7,8 +7,8 @@ public class MenuAdmin {
     private Scanner scanner;
     private AdministradorDAO adminDAO;
 
-    public MenuAdmin(Scanner scanner) {
-        this.scanner = scanner;
+    public MenuAdmin() {
+        this.scanner = new Scanner(System.in);
         this.adminDAO = new AdministradorDAO();
     }
 

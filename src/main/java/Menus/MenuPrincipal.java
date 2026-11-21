@@ -27,15 +27,15 @@ public class MenuPrincipal {
 
                 switch (opcion) {
                     case 1:
-                        MenuAdmin menuAdmin = new MenuAdmin(scanner);
+                        MenuAdmin menuAdmin = new MenuAdmin();
                         menuAdmin.mostrarMenu();
                         break;
                     case 2:
-                        MenuBibliotecario menuBiblio = new MenuBibliotecario(scanner);
+                        MenuBibliotecario menuBiblio = new MenuBibliotecario();
                         menuBiblio.mostrarMenu();
                         break;
                     case 3:
-                        MenuUsuario menuUsuario = new MenuUsuario(scanner);
+                        MenuUsuario menuUsuario = new MenuUsuario();
                         menuUsuario.mostrarMenu();
                         break;
                     case 4:

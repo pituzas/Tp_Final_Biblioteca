@@ -15,8 +15,8 @@ public class MenuUsuario {
     private UsuarioDAO usuarioDAO;
 
 
-    public MenuUsuario(Scanner scanner) {
-        this.scanner = scanner;
+    public MenuUsuario() {
+        this.scanner = new Scanner(System.in);
         this.libroDAO = new LibroDAO();
     }
 

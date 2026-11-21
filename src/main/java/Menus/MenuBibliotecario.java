@@ -22,8 +22,8 @@ public class MenuBibliotecario {
 
     /// Creamos un atributo de tipo EjemplarDAO
 
-    public MenuBibliotecario(Scanner scanner) {
-        this.scanner = scanner;
+    public MenuBibliotecario() {
+        this.scanner = new Scanner(System.in);
         this.libroDAO = new LibroDAO();
         this.prestamoDAO = new PrestamoDAO();
         this.usuarioDAO = new UsuarioDAO();

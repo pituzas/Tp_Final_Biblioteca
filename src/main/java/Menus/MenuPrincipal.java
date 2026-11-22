@@ -3,7 +3,7 @@ package Menus;
 import java.util.Scanner;
 
 public class MenuPrincipal {
-    private Scanner scanner;
+    private Scanner scanner = new Scanner(System.in);
 
     public MenuPrincipal() {
         this.scanner = new Scanner(System.in);
@@ -27,15 +27,15 @@ public class MenuPrincipal {
 
                 switch (opcion) {
                     case 1:
-                        MenuAdmin menuAdmin = new MenuAdmin();
+                        MenuAdmin menuAdmin = new MenuAdmin(scanner);
                         menuAdmin.mostrarMenu();
                         break;
                     case 2:
-                        MenuBibliotecario menuBiblio = new MenuBibliotecario();
+                        MenuBibliotecario menuBiblio = new MenuBibliotecario(scanner);
                         menuBiblio.mostrarMenu();
                         break;
                     case 3:
-                        MenuUsuario menuUsuario = new MenuUsuario();
+                        MenuUsuario menuUsuario = new MenuUsuario(scanner);
                         menuUsuario.mostrarMenu();
                         break;
                     case 4:

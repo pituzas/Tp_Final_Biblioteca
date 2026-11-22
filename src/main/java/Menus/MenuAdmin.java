@@ -16,8 +16,8 @@ public class MenuAdmin {
     private final BibliotecarioDAO bibliotecarioDAO;
     private final UsuarioDAO usuarioDAO;
 
-    public MenuAdmin() {
-        this.scanner = new Scanner(System.in);
+    public MenuAdmin(Scanner scanner) {
+        this.scanner = scanner;
         this.bibliotecarioDAO = new BibliotecarioDAO();
         this.usuarioDAO = new UsuarioDAO();
     }

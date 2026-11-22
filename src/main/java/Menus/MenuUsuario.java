@@ -20,8 +20,8 @@ public class MenuUsuario {
     private final PrestamoDAO prestamoDAO;
     private final UsuarioDAO usuarioDAO;
 
-    public MenuUsuario() {
-        this.scanner = new Scanner(System.in);
+    public MenuUsuario(Scanner scanner) {
+        this.scanner = scanner;
         this.ejemplarDAO = new EjemplarDAO();
         this.prestamoDAO = new PrestamoDAO();
         this.usuarioDAO = new UsuarioDAO();

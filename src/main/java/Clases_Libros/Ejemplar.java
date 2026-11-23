@@ -3,12 +3,12 @@ package Clases_Libros;
 import Excepciones.DatosInvalidosException;
 import Interfaces.Prestado;
 
-import java.util.UUID;
 
 import Enum.EstadoLibro;
 
 public class Ejemplar implements Prestado {
-    private UUID id;
+    private static int contador = 1;
+    private Integer id;
     private Libro libro;
     private EstadoLibro estadoLibro;
 
@@ -16,15 +16,28 @@ public class Ejemplar implements Prestado {
     /// CONSTRUCTORES
     public Ejemplar(Libro libro) {
         ///MOVI LA VALIDACION DEL ID QUE LO VALIDE DIRECTAMENTE EN EL SETTER Y NO EN EL CONSTRUCTOR.
+        setLibro(libro);
+        this.id = contador++;
 
-        this.id = UUID.randomUUID();
-        this.libro = libro;
         this.estadoLibro = EstadoLibro.DISPONIBLE;
     }
 
+    public Ejemplar(Integer id, Libro libro, EstadoLibro estadoLibro) {
+
+        if (id == null || id <= 0) {
+            throw new DatosInvalidosException("El id no puede ser null o negativo ");
+        }
+        this.id = id;
+        setLibro(libro);
+        setEstadoLibro(estadoLibro);
+
+        if (id >= contador) {
+            contador = id + 1;
+        }
+    }
 
     /// GETTERS Y SETTERS
-    public UUID getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -32,15 +45,16 @@ public class Ejemplar implements Prestado {
         return libro;
     }
 
-public void setLibro(Libro libro) {
-    if (libro == null) {
-        throw new DatosInvalidosException(
-            "El libro no puede ser null"
-        );
+    public void setLibro(Libro libro) {
+        if (libro == null) {
+            throw new DatosInvalidosException(
+                    "El libro no puede ser null"
+            );
+        }
+
+        this.libro = libro;
     }
 
-    this.libro = libro;
-}
     public EstadoLibro getEstadoLibro() {
         return estadoLibro;
     }
@@ -55,13 +69,7 @@ public void setLibro(Libro libro) {
     /// INTERFACE
     @Override
     public boolean estaDispo() {
-        if (estadoLibro == EstadoLibro.DISPONIBLE) {
-            System.out.println("El libro" + getLibro().getNombre() + "id :" + getId() + "Esta Disponible.");
-            return true;
-        } else {
-            System.out.println("EL libro no se encuentra disponible. Estado:" + getEstadoLibro());
-            return false;
-        }
+        return estadoLibro == EstadoLibro.DISPONIBLE;
     }
 
     @Override

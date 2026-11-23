@@ -113,51 +113,46 @@ public class MenuAdmin {
     private void agregarBibliotecario() throws AccesoDatosException {
         System.out.print("Ingrese el nombre: ");
         String nombre = scanner.nextLine().trim();
-        try {
-            if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
-                throw new DatosInvalidosException("El nombre no puede contener números.");
-            }
-        } catch (DatosInvalidosException e) {
-            System.out.println("ERROR: " + e.getMessage());
-            return;
-        }
 
+        if (nombre.isBlank() ||
+                !nombre.matches("[\\p{L} ]+")) {
+
+            throw new DatosInvalidosException(
+                    "El nombre solo puede contener letras y espacios."
+            );
+        }
 
         System.out.print("Ingrese el DNI: ");
         String dni = scanner.nextLine().trim();
-        try {
-            if (!dni.matches("[0-9]+")) {
-                throw new DatosInvalidosException("El DNI solo puede contener números.");
-            }
-        }catch (DatosInvalidosException e) {
-            System.out.println("ERROR: " + e.getMessage());
+
+        if (!dni.matches("\\d{7,8}")) {
+            throw new DatosInvalidosException(
+                    "El DNI debe contener entre 7 y 8 numeros."
+            );
         }
 
-
+        for (Bibliotecario b : bibliotecarioDAO.listarTodos()) {
+            if (b.getDni().equals(dni)) {
+                throw new DatosInvalidosException("Ya existe un bibiliotecario con el dni:" + dni);
+            }
+        }
 
         System.out.print("Ingrese la direccion: ");
         String direccion = scanner.nextLine().trim();
 
-        try {
-            if (!direccion.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
-                throw new DatosInvalidosException("La direccion no puede contener números.");
-            }
-        } catch (DatosInvalidosException e) {
-            System.out.println("ERROR: " + e.getMessage());
-            return;
+        if (!direccion.matches("[\\p{L}0-9 .º°#/-]+")
+                || direccion.isBlank()) {
+            throw new DatosInvalidosException("Ingrese una direccion valida, por ejemplo: Av. Colon 1500");
         }
 
 
         System.out.print("Ingrese el contacto: ");
         String contacto = scanner.nextLine().trim();
-        ///NUEVO
-        try {
-            if (!contacto.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
-                throw new DatosInvalidosException("El contacto no puede contener números.");
-            }
-        } catch (DatosInvalidosException e) {
-            System.out.println("ERROR: " + e.getMessage());
-            return;
+
+        if (!contacto.matches("[0-9+() -]{6,25}")) {
+            throw new DatosInvalidosException(
+                    "El contacto debe ser un telefono valido."
+            );
         }
 
 
@@ -175,50 +170,46 @@ public class MenuAdmin {
         Bibliotecario bibliotecario = bibliotecarioDAO.buscarPorId(legajo);
         System.out.print("Ingrese el nombre: ");
         String nombre = scanner.nextLine().trim();
-        try {
-            if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
-                throw new DatosInvalidosException("El nombre no puede contener números.");
-            }
-        } catch (DatosInvalidosException e) {
-            System.out.println("ERROR: " + e.getMessage());
-            return;
+
+        if (nombre.isBlank() ||
+                !nombre.matches("[\\p{L} ]+")) {
+
+            throw new DatosInvalidosException(
+                    "El nombre solo puede contener letras y espacios."
+            );
         }
 
 
         System.out.print("Ingrese el DNI: ");
         String dni = scanner.nextLine().trim();
-        try {
-            if (!dni.matches("[0-9]+")) {
-                throw new DatosInvalidosException("El DNI solo puede contener números.");
-            }
-        }catch (DatosInvalidosException e) {
-            System.out.println("ERROR: " + e.getMessage());
+        if (!dni.matches("\\d{7,8}")) {
+            throw new DatosInvalidosException(
+                    "El DNI debe contener entre 7 y 8 numeros."
+            );
         }
 
+        for (Bibliotecario b : bibliotecarioDAO.listarTodos()) {
+            if (b.getDni().equals(dni)
+                    && b.getLegajo() != legajo) {
+
+                throw new DatosInvalidosException("Otro bibliotecario ya tiene ese el dni:" + dni);
+            }
+        }
 
 
         System.out.print("Ingrese la direccion: ");
         String direccion = scanner.nextLine().trim();
-
-        try {
-            if (!direccion.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
-                throw new DatosInvalidosException("La direccion no puede contener números.");
-            }
-        } catch (DatosInvalidosException e) {
-            System.out.println("ERROR: " + e.getMessage());
-            return;
+        if (!direccion.matches("[\\p{L}0-9 .º°#/-]+") || direccion.isBlank()) {
+            throw new DatosInvalidosException("Ingrese una direccion valida, por ejemplo: Av. Colon 1500");
         }
 
 
         System.out.print("Ingrese el contacto: ");
         String contacto = scanner.nextLine().trim();
-        try {
-            if (!contacto.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
-                throw new DatosInvalidosException("El contacto no puede contener números.");
-            }
-        } catch (DatosInvalidosException e) {
-            System.out.println("ERROR: " + e.getMessage());
-            return;
+        if (!contacto.matches("[0-9+() -]{6,25}")) {
+            throw new DatosInvalidosException(
+                    "El contacto debe ser un telefono valido."
+            );
         }
 
         bibliotecario.setNombre(nombre);
@@ -258,7 +249,4 @@ public class MenuAdmin {
         return Integer.parseInt(scanner.nextLine().trim());
 
     }
-
-
-
 }

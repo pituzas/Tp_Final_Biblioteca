@@ -132,4 +132,63 @@ public class LibroDAO implements DAO<Libro> {
             throw new ElementoNoEncontradoException(codigo);
         }
     }
+
+
+
+    // NUEVO: metodo auxiliar para buscar libros
+    private List<Libro> buscarPorCampo(String campo, String texto)
+            throws AccesoDatosException {
+
+        List<Libro> resultados = new ArrayList<>();
+
+        if (texto == null || texto.isBlank()) {
+            return resultados;
+        }
+
+        // Los nombres de columna son fijos y controlados por el DAO
+        String sql = "SELECT * FROM libros " +
+                "WHERE LOWER(" + campo + ") LIKE LOWER(?) " +
+                "ORDER BY nombre";
+
+        try (Connection con = ConexionDB.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, "%" + texto.trim() + "%");
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    resultados.add(crearLibro(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new AccesoDatosException(
+                    "Error al buscar libros: " + e.getMessage()
+            );
+        }
+
+        return resultados;
+    }
+
+    // NUEVO: buscar por titulo
+    public List<Libro> buscarPorTitulo(String titulo)
+            throws AccesoDatosException {
+
+        return buscarPorCampo("nombre", titulo);
+    }
+
+    // NUEVO: buscar por autor
+    public List<Libro> buscarPorAutor(String autor)
+            throws AccesoDatosException {
+
+        return buscarPorCampo("autor", autor);
+    }
+
+    // NUEVO: buscar por genero
+    public List<Libro> buscarPorGenero(String genero)
+            throws AccesoDatosException {
+
+        return buscarPorCampo("genero", genero);
+    }
+
 }

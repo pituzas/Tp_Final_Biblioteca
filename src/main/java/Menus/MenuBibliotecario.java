@@ -1,6 +1,7 @@
 package Menus;
 
 import Excepciones.DatosInvalidosException;
+import Gestores.Gestor;
 import dao.LibroDAO;
 import dao.UsuarioDAO;
 import Clases_Persona.Usuario; // NUEVO
@@ -108,10 +109,23 @@ public class MenuBibliotecario {
                 switch (opcion) {
                     case 1:
                         /// Listar libros desde MYSQL
-                        System.out.println("LISTADO:");
-                        for (Libro l : libroDAO.listarTodos()) {
-                            System.out.println(l.toString());
+                        Gestor<Integer, Libro> gestorLibros = new Gestor<>();
+
+                        // Recuperar los libros desde MySQL
+                        for (Libro libro : libroDAO.listarTodos()) {
+                            gestorLibros.agregar(libro);
                         }
+
+                        System.out.println("\n===== LISTADO DE LIBROS =====");
+
+                        for (Libro libro : gestorLibros.listar()) {
+                            System.out.println("ID: " + libro.getId());
+                            System.out.println("Titulo: " + libro.getNombre());
+                            System.out.println("Autor: " + libro.getAutor());
+                            System.out.println("Genero: " + libro.getGenero());
+                            System.out.println("--------------------------");
+                        }
+
                         break;
                     case 2:
                         /// Buscar por id
@@ -277,16 +291,25 @@ public class MenuBibliotecario {
 
                     case 1:
                         // NUEVO: recuperar usuarios desde MySQL
-                        System.out.println("\n--- LISTADO DE USUARIOS ---");
+                        Gestor<Integer, Usuario> gestorUsuarios = new Gestor<>();
 
+                        // Recuperar los usuarios desde MySQL
                         for (Usuario usuario : usuarioDAO.listarTodos()) {
+                            gestorUsuarios.agregar(usuario);
+                        }
+
+                        System.out.println("\n===== LISTADO DE USUARIOS =====");
+
+                        for (Usuario usuario : gestorUsuarios.listar()) {
                             System.out.println(
-                                    "ID: " + usuario.getIdSocio() +
-                                            " | Nombre: " + usuario.getNombre() +
-                                            " | DNI: " + usuario.getDni() +
-                                            " | Contacto: " + usuario.getContacto()
+                                    "ID: " + usuario.getIdSocio()
+                                            + " | Nombre: " + usuario.getNombre()
+                                            + " | DNI: " + usuario.getDni()
+                                            + " | Contacto: " + usuario.getContacto()
                             );
                         }
+
+                        System.out.println("Total de usuarios: " + gestorUsuarios.cantidad());
                         break;
 
                     case 2:
@@ -464,11 +487,6 @@ public class MenuBibliotecario {
                 );
             }
 
-            // NUEVO: validar datos
-            if (nombre.isEmpty() || direccion.isEmpty() || contacto.isEmpty()) {
-                System.out.println("ERROR: Los campos no pueden estar vacíos.");
-                return;
-            }
 
             // MODIFICADO: actualizar atributos del usuario
             usuario.setNombre(nombre);
@@ -486,7 +504,7 @@ public class MenuBibliotecario {
         } catch (ElementoNoEncontradoException e) {
             System.out.println("Usuario no encontrado: " + e.getMessage());
 
-        }catch (IllegalArgumentException | DatosInvalidosException e) {
+        } catch (IllegalArgumentException | DatosInvalidosException e) {
             System.out.println("ERROR en los datos: " + e.getMessage());
         }
     }
@@ -679,11 +697,6 @@ public class MenuBibliotecario {
                 throw new DatosInvalidosException("Genero invalido.");
             }
 
-            // NUEVO: validar campos
-            if (nombre.isEmpty() || autor.isEmpty() || genero.isEmpty()) {
-                System.out.println("ERROR: Todos los campos son obligatorios.");
-                return;
-            }
 
             // MODIFICADO: actualizar los atributos en memoria
             libro.setNombre(nombre);
@@ -703,7 +716,7 @@ public class MenuBibliotecario {
         } catch (ElementoNoEncontradoException e) {
             System.out.println("Libro no encontrado: " + e.getMessage());
 
-        }catch (IllegalArgumentException | DatosInvalidosException e) {
+        } catch (IllegalArgumentException | DatosInvalidosException e) {
             System.out.println("ERROR en los datos: " + e.getMessage());
         }
     }
@@ -858,9 +871,7 @@ public class MenuBibliotecario {
                 if (prestamo.getEjemplar().getId().equals(id)
                         && prestamo.getEstadoPrestamo() == EstadoPrestamo.ACTIVO) {
 
-                    System.out.println(
-                            "ERROR: El ejemplar tiene un prestamo activo."
-                    );
+                    System.out.println("ERROR: El ejemplar tiene un prestamo activo.");
                     return;
                 }
             }

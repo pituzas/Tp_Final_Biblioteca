@@ -1,5 +1,6 @@
 package Menus;
 
+import Excepciones.DatosInvalidosException;
 import dao.LibroDAO;
 import dao.UsuarioDAO;
 import Clases_Persona.Usuario; // NUEVO
@@ -347,17 +348,59 @@ public class MenuBibliotecario {
 
             System.out.println("REGISTRAR USUARIO");
 
+
             System.out.print("Ingrese el nombre: ");
             String nombre = scanner.nextLine().trim();
+            scanner.nextLine();
+            ///NUEVO: VALIDACIONES PARA QUE NO SE PUEDAN INGRESAR NUMEROS O LETRAS.
+
+
+            try {
+                if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                    throw new DatosInvalidosException("El nombre no puede contener números.");
+                }
+            } catch (DatosInvalidosException e) {
+                System.out.println("ERROR: " + e.getMessage());
+                return;
+            }
+
 
             System.out.print("Ingrese el DNI: ");
             String dni = scanner.nextLine().trim();
 
+        try {
+            if (!dni.matches("[0-9]+")) {
+                throw new DatosInvalidosException("El DNI solo puede contener números.");
+            }
+        }catch (DatosInvalidosException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+
+
             System.out.print("Ingrese la direccion: ");
             String direccion = scanner.nextLine().trim();
 
+            try {
+                if (!direccion.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                    throw new DatosInvalidosException("La direccion no puede contener números.");
+                }
+            } catch (DatosInvalidosException e) {
+                System.out.println("ERROR: " + e.getMessage());
+                return;
+            }
+
+
             System.out.print("Ingrese el contacto: ");
             String contacto = scanner.nextLine().trim();
+
+            try {
+                if (!contacto.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                    throw new DatosInvalidosException("El contacto no puede contener números.");
+                }
+            } catch (DatosInvalidosException e) {
+                System.out.println("ERROR: " + e.getMessage());
+                return;
+            }
 
             // NUEVO: validar campos obligatorios
             if (nombre.isEmpty() || dni.isEmpty() || direccion.isEmpty() || contacto.isEmpty()) {
@@ -405,12 +448,39 @@ public class MenuBibliotecario {
 
             System.out.print("Nuevo nombre: ");
             String nombre = scanner.nextLine().trim();
+            ///NUEVO: VALIDACIONES PARA QUE NO SE PUEDAN INGRESAR NUMEROS O LETRAS.
+            try {
+                if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                    throw new DatosInvalidosException("El nombre no puede contener números.");
+                }
+            } catch (DatosInvalidosException e) {
+                System.out.println("ERROR: " + e.getMessage());
+                return;
+            }
 
             System.out.print("Nueva dirección: ");
             String direccion = scanner.nextLine().trim();
 
+            try {
+                if (!direccion.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                    throw new DatosInvalidosException("La direccion puede contener números.");
+                }
+            } catch (DatosInvalidosException e) {
+                System.out.println("ERROR: " + e.getMessage());
+                return;
+            }
+
             System.out.print("Nuevo contacto: ");
             String contacto = scanner.nextLine().trim();
+
+            try {
+                if (!contacto.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                    throw new DatosInvalidosException("El contacto no puede contener números.");
+                }
+            } catch (DatosInvalidosException e) {
+                System.out.println("ERROR: " + e.getMessage());
+                return;
+            }
 
             // NUEVO: validar datos
             if (nombre.isEmpty() || direccion.isEmpty() || contacto.isEmpty()) {
@@ -501,14 +571,45 @@ public class MenuBibliotecario {
             libroDAO.listarTodos();
 
             // NUEVO: solicitar los datos del libro
+            ///NUEVO: VALIDACIONES PARA QUE NO SE PUEDAN INGRESAR NUMEROS O LETRAS.
             System.out.print("Ingrese el nombre del libro: ");
             String nombre = scanner.nextLine().trim();
+
+
+            try {
+                if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                    throw new IllegalArgumentException("El nombre no puede contener números.");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("ERROR: " + e.getMessage());
+                return;
+            }
 
             System.out.print("Ingrese el autor: ");
             String autor = scanner.nextLine().trim();
 
+
+            try {
+                if (!autor.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                    throw new IllegalArgumentException("El autor no puede contener números.");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("ERROR: " + e.getMessage());
+                return;
+            }
+
             System.out.print("Ingrese el genero: ");
             String genero = scanner.nextLine().trim();
+
+
+            try {
+                if (!genero.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                    throw new IllegalArgumentException("El genero no puede contener números.");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("ERROR: " + e.getMessage());
+                return;
+            }
 
             // NUEVO: validar los campos obligatorios
             if (nombre.isEmpty() || autor.isEmpty() || genero.isEmpty()) {
@@ -582,14 +683,44 @@ public class MenuBibliotecario {
             System.out.println("Genero: " + libro.getGenero());
 
             // NUEVO: solicitar los nuevos datos
+            ///NUEVO: VALIDACIONES PARA QUE NO SE PUEDAN INGRESAR NUMEROS O LETRAS.
             System.out.print("\nNuevo nombre: ");
             String nombre = scanner.nextLine().trim();
+
+            try {
+                if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                    throw new IllegalArgumentException("El nombre no puede contener números.");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("ERROR: " + e.getMessage());
+                return;
+            }
 
             System.out.print("Nuevo autor: ");
             String autor = scanner.nextLine().trim();
 
+
+            try {
+                if (!autor.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                    throw new IllegalArgumentException("El autor no puede contener números.");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("ERROR: " + e.getMessage());
+                return;
+            }
+
             System.out.print("Nuevo genero: ");
             String genero = scanner.nextLine().trim();
+
+
+            try {
+                if (!genero.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                    throw new IllegalArgumentException("El genero no puede contener números.");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("ERROR: " + e.getMessage());
+                return;
+            }
 
             // NUEVO: validar campos
             if (nombre.isEmpty() || autor.isEmpty() || genero.isEmpty()) {

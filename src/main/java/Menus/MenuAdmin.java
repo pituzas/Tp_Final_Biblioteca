@@ -149,7 +149,9 @@ public class MenuAdmin {
         System.out.print("Ingrese el contacto: ");
         String contacto = scanner.nextLine().trim();
 
-        if (!contacto.matches("[0-9+() -]{6,25}")) {
+        if (!contacto.matches("[0-9+() -]{6,25}")
+                || contacto.replaceAll("\\D", "").length() < 6) {
+
             throw new DatosInvalidosException(
                     "El contacto debe ser un telefono valido."
             );
@@ -206,7 +208,9 @@ public class MenuAdmin {
 
         System.out.print("Ingrese el contacto: ");
         String contacto = scanner.nextLine().trim();
-        if (!contacto.matches("[0-9+() -]{6,25}")) {
+        if (!contacto.matches("[0-9+() -]{6,25}")
+                || contacto.replaceAll("\\D", "").length() < 6) {
+
             throw new DatosInvalidosException(
                     "El contacto debe ser un telefono valido."
             );
